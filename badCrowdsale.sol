@@ -12,7 +12,7 @@ contract Crowdsale {
     uint public price;
     token public tokenReward;
     mapping(address => uint256) public balanceOf;
-    bool fundingGoalReached = false;
+    bool fundingGoalReached = true;
     bool crowdsaleClosed = false;
 
     event GoalReached(address recipient, uint totalAmountRaised);
@@ -33,7 +33,7 @@ contract Crowdsale {
         beneficiary = ifSuccessfulSendTo;
         fundingGoal = fundingGoalInEthers * 1 ether;
         deadline = now + durationInMinutes * 1 minutes;
-        price = etherCostOfEachToken * 1 ether;
+        price = etherCostOfEachToken;
         tokenReward = token(addressOfTokenUsedAsReward);
     }
 
@@ -57,8 +57,9 @@ contract Crowdsale {
      * Check if goal was reached
      *
      * Checks if the goal or time limit has been reached and ends the campaign
+     * afterDeadline modifier has been removed
      */
-    function checkGoalReached() afterDeadline {
+    function checkGoalReached() {
         if (amountRaised >= fundingGoal){
             fundingGoalReached = true;
             GoalReached(beneficiary, amountRaised);
